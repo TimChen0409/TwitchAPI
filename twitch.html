@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <title>test3</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/earlyaccess/cwtexyen.css" rel="stylesheet">
+    <link rel="stylesheet" href="./bootstrap.css" />
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: cwTeXYen,"微軟正黑體",Arial, sans-serif;
+            background-image: url("background.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .main a {
+            color: #97CBFF;
+        }
+
+        .twitch_block {
+            width: 340px;
+            height: 260px;
+            display: inline-flex;
+            margin: 8px;
+            background: #000000AA;
+        }
+
+        .twitch_preview {
+            width: 320px;
+            height: 180px;
+            margin: 5px auto;
+        }
+
+        .twitch_info {
+            margin: 10px 0;
+            display: inline-flex;
+            width: 320px;
+        }
+
+
+        .twitch_logo {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            margin: 5px
+        }
+
+        .twitch_channel {
+            width: 250px;
+        }
+
+        .twitch_status {
+            width: 250px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 18px;
+        }
+
+        .twitch_name {
+            width: 250px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="p-2 text-primary text-center"><kbd>League of Legends<i class="fas fa-cog fa-spin"></i></kbd></h1>
+
+    <div class="container main">
+        <div class="row">
+
+        </div>
+    </div>
+
+    <footer class="py-3 text-center">
+        <section>
+            Copyright &copy; 2020 Tim Chen All rights reserved.
+            <a href="https://github.com/timchen0409" target="_blank"><i class="fab fa-github"></i></a>
+        </section>
+    </footer>
+
+    <script src="./jquery-3.5.0.min.js"></script>
+    <script src="./bootstrap.js"></script>
+    <script type="text/javascript">
+
+        const request = new XMLHttpRequest();
+        const container = document.querySelector('.row');
+        request.onload = function load() {
+            if (request.status >= 200 && request.status < 400) {
+                console.log(request);
+                const response = request.responseText; // 取得資料，代表通過驗證
+                const json = JSON.parse(response);
+                for (let i = 0; i < json.streams.length; i += 1) {
+                    const elements = document.createElement('div');
+                    elements.classList.add('col-sm-4');
+                    elements.innerHTML = `<a href="${json.streams[i].channel.url}" target="_blank" class="twitch_block">
+                                                            <div class="twitch_preview">
+                                                                <img src="${json.streams[i].preview.medium}"/>
+                                                            <div class="twitch_info">
+                                                                <img src="${json.streams[i].channel.logo}" class="twitch_logo"/>
+                                                                    <div class="ml-2">
+                                                                        <div class="twitch_status">${json.streams[i].channel.status}</div>
+                                                                        <div class="twitch_name">${json.streams[i].channel.display_name} (${json.streams[i].channel.name})</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>`;
+                    container.appendChild(elements);
+                }
+            } else {
+                console.log('err');
+            }
+        };
+
+        request.onerror = function error() {
+            console.log('error');
+        };
+
+        request.open('GET', 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=12&language=zh', true);
+        request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
+        request.setRequestHeader('Client-ID', '7jnow7dr6xs9f979a40a1rbd3rlim6');
+
+        request.send();
+    </script>
+</body>
+</html>
+
+
