@@ -126,7 +126,7 @@
             console.log('error');
         };
 
-        request.open('GET', 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=12&language=zh', true);
+        request.open('GET', 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=12&language=zh', true);//非同步
         request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
         request.setRequestHeader('Client-ID', '7jnow7dr6xs9f979a40a1rbd3rlim6');
 
