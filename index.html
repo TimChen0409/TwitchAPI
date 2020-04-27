@@ -71,12 +71,18 @@
 
 <body>
 
-    <h3 class="p-2 text-center"><kbd>League of Legends<i class="fas fa-cog fa-spin"></i></kbd></h3>
 
     <div class="container">
-        <div class="row">
+        <h3 class="p-2 text-center"><kbd>League of Legends<i class="fas fa-cog fa-spin"></i></kbd></h3>
 
+        <div class="row" id="block1">
         </div>
+
+        <h3 class="p-2 text-center"><kbd>MapleStory<i class="fab fa-canadian-maple-leaf"></i></kbd></h3>
+
+        <div class="row" id="block2">
+        </div>
+
     </div>
     <footer class="py-2 text-center bg-dark">
         <section>
@@ -88,49 +94,78 @@
     <script src="./jquery-3.5.0.min.js"></script>
     <script src="./bootstrap.js"></script>
     <script type="text/javascript">
+        //XMLHttpRequest
+        var apiUrl = 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=zh';
+        var clientId = '7jnow7dr6xs9f979a40a1rbd3rlim6';
+        var request = new XMLHttpRequest();
+        request.open('GET', apiUrl, true);//非同步
+        request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
+        request.setRequestHeader('Client-ID', clientId);
+        request.send();
 
-        const request = new XMLHttpRequest();
         const container = document.querySelector('.row');
         request.onload = function load() {
-            if (request.status >= 200 && request.status < 400) {
-                const response = request.responseText; // 取得資料，代表通過驗證
-                const json = JSON.parse(response);
-                console.log(json);//查看資料array
+            if (this.status >= 200 && this.status < 400) {
+                var data = JSON.parse(this.responseText);
+                console.log(data);//查看資料array
+                getData(data, block1);
 
-                for (let i = 0; i < json.streams.length; i += 1) {
-                    const elements = document.createElement('div');
-                    elements.classList.add('col-sm-4');
-                    elements.innerHTML = `<a href="${json.streams[i].channel.url}" target="_blank" class="twitch_block">
-                                                            <div class="twitch_preview">
-                                                                <img src="${json.streams[i].preview.medium}"/>
-                                                            <div class="twitch_info">
-                                                                <img src="${json.streams[i].channel.logo}" class="twitch_avatar"/>
-                                                                <div class="ml-2">
-                                                                        <div class="twitch_title">${json.streams[i].channel.status}</div>
-                                                                    <div class="twitch_name">
-                                                                        <div class="float-left">${json.streams[i].channel.display_name} (${json.streams[i].channel.name})</div>
-                                                                        <div class="float-right text-danger"><i class="fa fa-user"></i> ${json.streams[i].viewers}</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>`;
-                    container.appendChild(elements);
-                }
             } else {
-                console.log('err');
+                console.log('error');
             }
         };
-
         request.onerror = function error() {
             console.log('error');
         };
 
-        request.open('GET', 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=12&language=zh', true);//非同步
-        request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
-        request.setRequestHeader('Client-ID', '7jnow7dr6xs9f979a40a1rbd3rlim6');
 
-        request.send();
+        //JQuery AJAX
+        var apiUrl2 = 'https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=zh';
+        $.ajax({
+            url: apiUrl2,
+            headers: {
+                'Accept': 'application/vnd.twitchtv.v5+json',
+                'client-ID': clientId,
+            },
+            success: (data2) => {
+                console.log(data2);//查看資料array
+                getData(data2, block2);
+            },
+            error: function () {
+                alert('JQuery Ajax Error');
+            }
+
+        })
+           
+
+        function getData(data, block) {
+            const streams = data.streams;
+            const $row = $(block);//選擇添加區塊
+            for (var i = 0; i < streams.length; i++) {
+                $row.append(getColumn(streams[i]))
+            }
+        };
+
+        function getColumn(data) {
+            return `<div class="col-sm-4">
+                        <a href="${data.channel.url}" target="_blank" class="twitch_block">
+                                <div class="twitch_preview">
+                                    <img src="${data.preview.medium}"/>
+                                <div class="twitch_info">
+                                    <img src="${data.channel.logo}" class="twitch_avatar"/>
+                                    <div class="ml-2">
+                                            <div class="twitch_title">${data.channel.status}</div>
+                                        <div class="twitch_name">
+                                            <div class="float-left">${data.channel.display_name} (${data.channel.name})</div>
+                                            <div class="float-right text-danger"><i class="fa fa-user"></i> ${data.viewers}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>`;
+        };
+
     </script>
 </body>
 </html>
