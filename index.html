@@ -7,102 +7,30 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/earlyaccess/cwtexyen.css" rel="stylesheet">
     <link rel="stylesheet" href="bootstrap.css" />
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: url("background.png");
-            background-size: cover;
-            height: 100%;
-            width: 100%;
-            font-family: cwTeXYen,"微軟正黑體",Arial, sans-serif;
-        }
-
-        .container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .row a {
-            color: #97CBFF;
-            cursor: pointer;
-        }
-
-
-        .twitch_block {
-            display: flex;
-            margin: 8px;
-            background: #000000AA;
-            border: 1px dashed #ffd800;
-        }
-
-            .twitch_block:hover {
-                box-shadow: inset 0 0 10px 5px #ffd800;
-                filter: brightness(1.5);
-                -webkit-filter: brightness(1.5);
-                transition: all 0.5s;
-            }
-
-        .twitch_preview {
-            width: 320px;
-            margin: 5px auto;
-        }
-
-
-        .twitch_info {
-            padding: 5px;
-            display: flex;
-        }
-
-        .twitch_avatar {
-            height: 50px;
-            width: 50px;
-            border-radius: 50%;
-            margin: 5px
-        }
-
-        .twitch_title {
-            width: 250px;
-            overflow: hidden;
-            white-space: nowrap; /*文字不換行*/
-            text-overflow: ellipsis;
-            font-size: 18px;
-        }
-
-        .twitch_name {
-            font-size: 13px;
-            padding-right: 8px;
-            overflow: hidden;
-        }
-
-    </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-
-
     <div class="container">
         <h1 class="py-1 text-center">中文直播的頻道</h1>
 
         <div class="py-2">
-            <button id="LOL" class="btn btn-dark" onclick="getLoLData(lang)">英雄聯盟</button>
-            <button id="MS" class="btn btn-dark" onclick="getMPData(lang)">楓之谷</button>
+            <button id="LOL" class="btn btn-dark" onclick="getLoLData(LANG)">英雄聯盟</button>
+            <button id="MS" class="btn btn-dark" onclick="getMPData(LANG)">楓之谷</button>
         </div>
         <div id="LolBlock" style="display:none">
             <div class="text-center">
-                <a class="btn btn-light" onclick="changeLang('zh-tw')">中文</a>
-                <a class="btn btn-light" onclick="changeLang('en')">English</a>
+                <a class="btn btn-light" onclick="changeLang('zh','LOL')">中文</a>
+                <a class="btn btn-light" onclick="changeLang('en','LOL')">English</a>
             </div>
             <div class="row" id="block1">
             </div>
         </div>
 
-        <div id="MPBlock" style="display:none">
+        <div id="MSBlock" style="display:none">
             <div class="text-center">
-                <a class="btn btn-light" onclick="changeLang('zh-tw')">中文</a>
-                <a class="btn btn-light" onclick="changeLang('en')">English</a>
+                <a class="btn btn-light" onclick="changeLang('zh','MS')">中文</a>
+                <a class="btn btn-light" onclick="changeLang('en','MS')">English</a>
             </div>
             <div class="row" id="block2">
             </div>

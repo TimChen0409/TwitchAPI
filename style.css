@@ -1,137 +1,68 @@
-body, html {
-    height: 100vh;
+body {
     margin: 0;
     padding: 0;
-    font-family: "微軟正黑體",Arial, Helvetica, sans-serif;
-    align-items: center;
-    flex-direction: column;
-    display: flex;
-    background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);
-}
-
-h1 {
-    color: #009688;
-    padding: 1em 0;
-    font-family: monospace;
-}
-
-.card-wrapper {
-    list-style: none;
-    margin: 20px;
+    background: url("background.png");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    font-family: cwTeXYen,"微軟正黑體",Arial, sans-serif;
 }
 
 .container {
-    width: 640px;
-    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.card {
-    position: relative;
-    transform-style: preserve-3d;
-    float: left;
-    margin: 15px;
-    width: 100px;
-    height: 140px;
+.row a {
+    color: #97CBFF;
+    cursor: pointer;
 }
 
-    .card.active {
-        transform: rotateY(180deg);
-        -webkit-transform: rotateY(180deg);
+
+.twitch_block {
+    display: flex;
+    margin: 8px;
+    background: #000000AA;
+    border: 1px dashed #ffd800;
+}
+
+    .twitch_block:hover {
+        box-shadow: inset 0 0 10px 5px #ffd800;
+        filter: brightness(1.5);
+        -webkit-filter: brightness(1.5);
+        transition: all 0.5s;
     }
 
-    .card img {
-        width: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: block;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-/* 翻轉效果 */
-.front {
-    transform: rotateY(180deg);
-    -webkit-transform: rotateY(180deg);
+.twitch_preview {
+    width: 320px;
+    margin: 5px auto;
 }
 
 
-.transition {
-    transition: all .5s;
-    -webkit-transition: all .5s;
+.twitch_info {
+    padding: 5px;
+    display: flex;
 }
 
-.score {
-    color: #ff0000;
-    font-weight: bold;
-    font-size: 20px;
+.twitch_avatar {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin: 5px
 }
 
-#tiktok {
-    width: 400px;
-    height: 15px;
-    background: red;
-    border: 2px solid #4CAF50;
-    margin: 10px auto;
-    border-radius: 3px;
-}
-
-#counter {
-    width: 100%;
-    height: 100%;
-    background: white;
-    float: right;
-}
-
-.mask {
-    width: inherit;
-    height: 800px;
-    position: absolute;
-    top: 0;
-    z-index: 99;
-    background: rgba(0,0,0,0.5);
-}
-
-.intro {
-    width: 400px;
-    height: 400px;
-    background: #F8F8C6;
-    margin: 100px auto 0px auto;
-    font-weight: bolder;
+.twitch_title {
+    width: 250px;
+    overflow: hidden;
+    white-space: nowrap; /*文字不換行*/
+    text-overflow: ellipsis;
     font-size: 18px;
-    line-height: 30px;
-    padding: 20px;
 }
 
-    .intro button {
-        display: block;
-        padding: 15px 20px;
-        font-size: 20px;
-        cursor: pointer;
-        color: #fff;
-        background-color: #4CAF50;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 9px #999;
-        margin: 60px auto 0 auto;
-    }
-
-        .intro button:hover {
-            background-color: #3e8e41
-        }
-
-        .intro button:active {
-            background-color: #3e8e41;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
-
-.chk {
-    margin-left: 80px;
-}
-
-#timer {
-    height: 20px;
+.twitch_name {
+    font-size: 13px;
+    padding-right: 8px;
+    overflow: hidden;
 }
