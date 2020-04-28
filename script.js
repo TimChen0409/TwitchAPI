@@ -5,7 +5,6 @@ let LANG = 'zh';
 function getLoLData(LANG) {
 
     var apiUrl = `https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG} `;
-    console.log(apiUrl);
     var request = new XMLHttpRequest();
     request.open('GET', apiUrl, true);//非同步
     request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
@@ -34,7 +33,6 @@ function getLoLData(LANG) {
 function getMPData(LANG) {
 
     var apiUrl2 = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG} `;
-    console.log(apiUrl2);
     $.ajax({
         url: apiUrl2,
         headers: {
