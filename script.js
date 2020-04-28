@@ -15,7 +15,6 @@ function getLoLData(LANG) {
     request.onload = function load() {
         console.log(request.responseText);
 
-
         if (this.status >= 200 && this.status < 400) {
             var data = JSON.parse(this.responseText);
             getData(data, block1);
