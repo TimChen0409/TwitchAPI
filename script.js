@@ -1,111 +1,94 @@
-let counterWidth = 100;  //計時條長度
-let timer;        //倒數時間(亳秒)
-let counterHandle;      //計時條
-let val;//儲存第一張卡片Value
-let val2;//儲存第二張卡片Value
-let count = 0;//判斷翻卡第一次還是第二次
-let point = 0;//計算分數
+let clientId = '7jnow7dr6xs9f979a40a1rbd3rlim6';
+let LANG = 'zh-tw';
 
-function startGame() {
-    $(".mask").css("display", "none");
-    init();//遊戲初始化
-    counterHandle = setInterval(timeCounter, 100)    //啟動計時器
-    chk();//卡片判斷與計分
-}
+//XMLHttpRequest
+function getLoLData(LANG) {
 
 
-//遊戲初始化
-function init() {
-    $(".card").removeClass('front active');
-    point = 0;
-    $("span").text('結果：');
-    $(".score").text('總分：');
-    $(".card-wrapper").html($(".card-wrapper .card").sort(function () {
-        return Math.random() - 0.5;
-    }));//卡片隨機洗牌
-    clearInterval(counterHandle);
-    counterWidth = 100;
-    timer = 30000;
-    complete = 0;
-    $("#counter").css("width", "100%");
+    var apiUrl = 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG} ';
+    console.log(apiUrl);
+    var request = new XMLHttpRequest();
+    request.open('GET', `https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG} `, true);//非同步
+    request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
+    request.setRequestHeader('Client-ID', clientId);
+    request.send();
+
+    request.onload = function load() {
+        if (this.status >= 200 && this.status < 400) {
+            var data = JSON.parse(this.responseText);
+            getData(data, block1);
+
+        } else {
+            console.log('error');
+        }
+    };
+    request.onerror = function error() {
+        console.log('error');
+    };
+    $('#LolBlock').show();
+    $('#MPBlock').hide();
 };
 
+//JQuery AJAX
+function getMPData() {
 
-//卡片判斷與計分
-function chk() {
-    $(".card-wrapper").on('click', '.card', function () {
 
-        if ($(this).hasClass("active") || $(this).hasClass("front")) {//如果卡片被打開移除監聽事件
-            $(this).off("click");
-        }
-        else {
-            $(this).addClass('front')
-            if (count == 0) {
-                val = $(this).find('.front').attr('value');
-                count++;
-            }
-            else {
-                val2 = $(this).find('.front').attr('value');
-                count = 0;
-                if (val == val2) {
-                    $(".judge").text('結果：正確!⭕');
-                    $('.card.front').addClass('active').removeClass('front');
-                    point++;
-                    $(".score").append('💎');
-
-                }
-                else {
-                    $(".judge").text('結果：錯誤!❌');
-                    setTimeout(function () {
-                        $(".card.front").removeClass('front')
-                    }, 500);
-                    val = undefined;
-                    val2 = undefined;
-                }
-            }
-            if (point >= 6) {
-                setTimeout(function () {
-                    result();
-                }, 700);
-
-            }
+    var apiUrl2 = 'https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=zh';
+    $.ajax({
+        url: apiUrl2,
+        headers: {
+            'Accept': 'application/vnd.twitchtv.v5+json',
+            'client-ID': clientId,
+        },
+        success: (data2) => {
+            getData(data2, block2);
+        },
+        error: function () {
+            alert('JQuery Ajax Error');
         }
 
-    });
+    })
+    $('#LolBlock').hide();
+    $('#MPBlock').show();
 };
 
-//計時條倒數
-function timeCounter() {
-    if (timer < 0) {
-        $("#counter").css("width", "0%");
-        clearInterval(counterHandle);
-        result();  //計時結束時執行結果判定
-    } else {
-        timer -= 100;
-        counterWidth -= 0.33
-        $("#counter").css("width", counterWidth + "%");
-
-        var number = Math.floor(timer / 1000 * 10) / 10;
-        if (number > 0) {
-            $("#timer").html("倒數計時器："+number);
-        }
-        else {
-            $("#timer").html(0);
-        }
+function getData(LANG, data, block) {
+    const streams = data.streams;
+    const $row = $(block);//選擇添加區塊
+    for (var i = 0; i < streams.length; i++) {
+        $row.append(getColumn(streams[i]))
     }
 };
 
-//結果判定
-function result() {
-    let count = point;
-    let str = "";
-    //設定結果字串
-    if (count >= 6) {
-        str = "遊戲結果：恭喜完成遊戲\n<button onclick='startGame()'>繼續遊戲</button>";
-    } else {
-        str = "遊戲結果：失敗\n<button onclick='startGame()'>重新進行遊戲</button>";
-    }
-    //把結果字串寫入提示顯示區
-    $(".intro").html(str);
-    $(".mask").css("display", "block");
+function getColumn(LANG, data) {
+    return `<div class="col-sm-4">
+            <a href="${data.channel.url}" target="_blank" class="twitch_block">
+                    <div class="twitch_preview">
+                        <img src="${data.preview.medium}"/>
+                    <div class="twitch_info">
+                        <img src="${data.channel.logo}" class="twitch_avatar"/>
+                        <div class="ml-2">
+                                <div class="twitch_title">${data.channel.status}</div>
+                            <div class="twitch_name">
+                                <div class="float-left">${data.channel.display_name} (${data.channel.name})</div>
+                                <div class="float-right text-danger"><i class="fa fa-user"></i> ${data.viewers}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>`;
+};
+
+
+
+function changeLang(lang) {
+    $('.container h1').text(window.I18N[lang]['TITLE']);
+    $('#LOL').text(window.I18N[lang]['LOLNAME']);
+    $('#MS').text(window.I18N[lang]['MSNAME']);
+
+    $('.row').empty();//清除元素裡的內容
+
+
+
 };

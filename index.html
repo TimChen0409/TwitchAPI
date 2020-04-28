@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/earlyaccess/cwtexyen.css" rel="stylesheet">
-    <link rel="stylesheet" href="./bootstrap.css" />
+    <link rel="stylesheet" href="bootstrap.css" />
     <style>
         body {
             margin: 0;
@@ -25,9 +25,11 @@
             align-items: center;
         }
 
-            .container a {
-                color: #97CBFF;
-            }
+        .row a {
+            color: #97CBFF;
+            cursor: pointer;
+        }
+
 
         .twitch_block {
             display: flex;
@@ -75,12 +77,6 @@
             overflow: hidden;
         }
 
-        .footer {
-            bottom: 0;
-            width: 100%;
-            height: 50px;
-            background-color: #f5f5f5;
-        }
     </style>
 </head>
 
@@ -88,120 +84,42 @@
 
 
     <div class="container">
+        <h1 class="py-1 text-center">中文直播的頻道</h1>
 
         <div class="py-2">
-            <button class="btn btn-dark" onclick="getLoLData()">League of Legends</button>
-            <button class="btn btn-dark" onclick="getMPData()">MapleStory</button>
+            <button id="LOL" class="btn btn-dark" onclick="getLoLData(lang)">英雄聯盟</button>
+            <button id="MS" class="btn btn-dark" onclick="getMPData(lang)">楓之谷</button>
         </div>
         <div id="LolBlock" style="display:none">
-            <h3 class="p-2 text-center"><kbd>League of Legends<i class="fas fa-flag"></i></kbd></h3>
+            <div class="text-center">
+                <a class="btn btn-light" onclick="changeLang('zh-tw')">中文</a>
+                <a class="btn btn-light" onclick="changeLang('en')">English</a>
+            </div>
             <div class="row" id="block1">
             </div>
         </div>
 
         <div id="MPBlock" style="display:none">
-            <h3 class="p-2 text-center"><kbd>MapleStory<i class="fab fa-canadian-maple-leaf"></i></kbd></h3>
+            <div class="text-center">
+                <a class="btn btn-light" onclick="changeLang('zh-tw')">中文</a>
+                <a class="btn btn-light" onclick="changeLang('en')">English</a>
+            </div>
             <div class="row" id="block2">
             </div>
         </div>
     </div>
-    <footer class="py-3 text-center bg-dark footer">
+    <footer class="py-2 text-center bg-dark">
         <section>
             Copyright &copy; 2020 Tim Chen All rights reserved.
             <a href="https://github.com/timchen0409" target="_blank"><i class="fab fa-github"></i></a>
         </section>
     </footer>
 
-    <script src="./jquery-3.5.0.min.js"></script>
-    <script src="./bootstrap.js"></script>
-    <script type="text/javascript">
-        var clientId = '7jnow7dr6xs9f979a40a1rbd3rlim6';
-
-        //XMLHttpRequest
-        function getLoLData() {
-
-            clearData();
-
-            var apiUrl = 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=zh';
-            var request = new XMLHttpRequest();
-            request.open('GET', apiUrl, true);//非同步
-            request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
-            request.setRequestHeader('Client-ID', clientId);
-            request.send();
-
-            request.onload = function load() {
-                if (this.status >= 200 && this.status < 400) {
-                    var data = JSON.parse(this.responseText);
-                    getData(data, block1);
-
-                } else {
-                    console.log('error');
-                }
-            };
-            request.onerror = function error() {
-                console.log('error');
-            };
-            $('#LolBlock').show();
-            $('#MPBlock').hide();
-        };
-
-        //JQuery AJAX
-        function getMPData() {
-
-            clearData();
-
-            var apiUrl2 = 'https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=zh';
-            $.ajax({
-                url: apiUrl2,
-                headers: {
-                    'Accept': 'application/vnd.twitchtv.v5+json',
-                    'client-ID': clientId,
-                },
-                success: (data2) => {
-                    getData(data2, block2);
-                },
-                error: function () {
-                    alert('JQuery Ajax Error');
-                }
-
-            })
-            $('#LolBlock').hide();
-            $('#MPBlock').show();
-        };
-
-        function getData(data, block) {
-            const streams = data.streams;
-            const $row = $(block);//選擇添加區塊
-            for (var i = 0; i < streams.length; i++) {
-                $row.append(getColumn(streams[i]))
-            }
-        };
-
-        function getColumn(data) {
-            return `<div class="col-sm-4">
-                                    <a href="${data.channel.url}" target="_blank" class="twitch_block">
-                                            <div class="twitch_preview">
-                                                <img src="${data.preview.medium}"/>
-                                            <div class="twitch_info">
-                                                <img src="${data.channel.logo}" class="twitch_avatar"/>
-                                                <div class="ml-2">
-                                                        <div class="twitch_title">${data.channel.status}</div>
-                                                    <div class="twitch_name">
-                                                        <div class="float-left">${data.channel.display_name} (${data.channel.name})</div>
-                                                        <div class="float-right text-danger"><i class="fa fa-user"></i> ${data.viewers}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>`;
-        };
-
-        function clearData() {
-            $(".row").empty();//清除元素裡的內容
-        };
-
-    </script>
+    <script src="jquery-3.5.0.min.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="lang-en.js"></script>
+    <script src="lang-zh-tw.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
 
