@@ -31,7 +31,6 @@ function getLoLData(LANG) {
 //JQuery AJAX
 function getMSData(LANG) {
     clearData();
-
     var apiUrl2 = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG} `;
     $.ajax({
         url: apiUrl2,
