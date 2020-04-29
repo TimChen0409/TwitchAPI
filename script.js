@@ -3,7 +3,7 @@ let LANG = 'zh';
 
 //XMLHttpRequest
 function getLoLData(LANG) {
-
+    clearData();
     var apiUrl = `https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG} `;
     var request = new XMLHttpRequest();
     request.open('GET', apiUrl, true);//非同步
@@ -12,7 +12,6 @@ function getLoLData(LANG) {
     request.send();
 
     request.onload = function load() {
-        console.log(request.responseText);
 
         if (this.status >= 200 && this.status < 400) {
             var data = JSON.parse(this.responseText);
@@ -30,7 +29,8 @@ function getLoLData(LANG) {
 };
 
 //JQuery AJAX
-function getMPData(LANG) {
+function getMSData(LANG) {
+    clearData();
 
     var apiUrl2 = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG} `;
     $.ajax({
@@ -79,7 +79,9 @@ function getColumn(data) {
         </div>`;
 };
 
-
+function clearData() {
+    $('.row').empty();//清除元素裡的內容
+}
 
 function changeLang(lang,type) {
     $('.container h1').text(window.I18N[lang]['TITLE']);
@@ -89,6 +91,6 @@ function changeLang(lang,type) {
     $('.row').empty();//清除元素裡的內容
 
     if (type == 'LOL') getLoLData(LANG);
-    if (type == 'MS') getMPData(LANG);
+    if (type == 'MS') getMSData(LANG);
 
 };
