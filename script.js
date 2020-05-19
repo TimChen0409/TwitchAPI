@@ -4,8 +4,8 @@ let LANG = 'zh';
 //XMLHttpRequest
 function getLoLData(LANG) {
     clearData();
-    var apiUrl = `https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG} `;
-    var request = new XMLHttpRequest();
+    let apiUrl = `https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG} `;
+    let request = new XMLHttpRequest();
     request.open('GET', apiUrl, true);//非同步
     request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
     request.setRequestHeader('Client-ID', clientId);
@@ -14,7 +14,7 @@ function getLoLData(LANG) {
     request.onload = function load() {
 
         if (this.status >= 200 && this.status < 400) {
-            var data = JSON.parse(this.responseText);
+            let data = JSON.parse(this.responseText);
             getData(data, block1);
 
         } else {
@@ -31,7 +31,7 @@ function getLoLData(LANG) {
 //JQuery AJAX
 function getMSData(LANG) {
     clearData();
-    var apiUrl2 = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG} `;
+    let apiUrl2 = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG} `;
     $.ajax({
         url: apiUrl2,
         headers: {
