@@ -32,20 +32,35 @@ function getLoLData(LANG) {
 function getMSData(LANG) {
     clearData();
     let apiUrl2 = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG} `;
+
+    // AJAX寫法1
+    // $.ajax({
+    //     url: apiUrl2,
+    //     headers: {
+    //         'Accept': 'application/vnd.twitchtv.v5+json',
+    //         'client-ID': clientId,
+    //     },
+    //     success: (data2) => {
+    //         getData(data2, block2);
+    //     },
+    //     error: function () {
+    //         console.log('JQuery Ajax Error');
+    //     }
+    // })
+
+    // AJAX寫法2
     $.ajax({
         url: apiUrl2,
         headers: {
             'Accept': 'application/vnd.twitchtv.v5+json',
             'client-ID': clientId,
-        },
-        success: (data2) => {
-            getData(data2, block2);
-        },
-        error: function () {
-            console.log('JQuery Ajax Error');
         }
-
     })
+    .done(data2 => getData(data2, block2))
+    .fail(() => console.log('JQuery Ajax Error'));
+
+
+
     $('#LolBlock').hide();
     $('#MSBlock').show();
 };
@@ -82,7 +97,7 @@ function clearData() {
     $('.row').empty();//清除元素裡的內容
 }
 
-function changeLang(lang,type) {
+function changeLang(lang, type) {
     $('.container h1').text(window.I18N[lang]['TITLE']);
     $('#LOL').text(window.I18N[lang]['LOLNAME']);
     $('#MS').text(window.I18N[lang]['MSNAME']);
