@@ -57,7 +57,8 @@ function getMSData(LANG) {
         }
     })
     .done(data2 => getData(data2, block2))
-    .fail(() => console.log('JQuery Ajax Error'));
+    .fail(() => console.log('JQuery Ajax Error'))
+    .always(()=>console.log('complete'));
 
 
 
