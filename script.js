@@ -4,15 +4,13 @@ let LANG = 'zh';
 //XMLHttpRequest
 function getLoLData(LANG) {
     clearData();
-    let apiUrl = `https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG} `;
+    let apiUrl = `https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=6&language=${LANG}`;
     let request = new XMLHttpRequest();
     request.open('GET', apiUrl, true);//非同步
     request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
     request.setRequestHeader('Client-ID', clientId);
     request.send();
-
     request.onload = function load() {
-
         if (this.status >= 200 && this.status < 400) {
             let data = JSON.parse(this.responseText);
             getData(data, block1);
@@ -26,22 +24,22 @@ function getLoLData(LANG) {
     };
     $('#LolBlock').show();
     $('#MSBlock').hide();
+    $('#ChattingBlock').hide();
 };
 
 //JQuery AJAX
 function getMSData(LANG) {
     clearData();
-    let apiUrl2 = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG} `;
-
+    let apiUrl = `https://api.twitch.tv/kraken/streams/?game=MapleStory&limit=6&language=${LANG}`;
     // AJAX寫法1
     // $.ajax({
-    //     url: apiUrl2,
+    //     url: apiUrl,
     //     headers: {
     //         'Accept': 'application/vnd.twitchtv.v5+json',
     //         'client-ID': clientId,
     //     },
-    //     success: (data2) => {
-    //         getData(data2, block2);
+    //     success: (data) => {
+    //         getData(data, block2);
     //     },
     //     error: function () {
     //         console.log('JQuery Ajax Error');
@@ -50,21 +48,38 @@ function getMSData(LANG) {
 
     // AJAX寫法2
     $.ajax({
-        url: apiUrl2,
+        url: apiUrl,
         headers: {
             'Accept': 'application/vnd.twitchtv.v5+json',
             'client-ID': clientId,
         }
-    })
-    .done(data2 => getData(data2, block2))
-    .fail(() => console.log('JQuery Ajax Error'))
-    .always(()=>console.log('complete'));
-
-
+    }).done(data => getData(data, block2))
+        .fail(() => console.log('JQuery Ajax Error'))
+        .always(() => console.log('complete'));
 
     $('#LolBlock').hide();
     $('#MSBlock').show();
+    $('#ChattingBlock').hide();
 };
+
+//axios
+function getChattingData(LANG) {
+    clearData();
+    let apiUrl = `https://api.twitch.tv/kraken/streams/?game=Just%20Chatting&limit=6&language=${LANG}`;
+
+    axios.get(apiUrl, {
+        headers: {
+            'Accept': 'application/vnd.twitchtv.v5+json',
+            'client-ID': clientId,
+        }
+    }).then(res => getData(res.data, block3))
+        .catch(error => console.log(error));
+
+    $('#LolBlock').hide();
+    $('#MSBlock').hide();
+    $('#ChattingBlock').show();
+}
+
 
 function getData(data, block) {
     const streams = data.streams;
@@ -102,10 +117,14 @@ function changeLang(lang, type) {
     $('.container h1').text(window.I18N[lang]['TITLE']);
     $('#LOL').text(window.I18N[lang]['LOLNAME']);
     $('#MS').text(window.I18N[lang]['MSNAME']);
-    LANG = lang;
+    $('#Chat').text(window.I18N[lang]['ChattingNAME']);
     $('.row').empty();//清除元素裡的內容
 
-    if (type == 'LOL') getLoLData(LANG);
-    if (type == 'MS') getMSData(LANG);
+    if (type == 'LOL')
+        getLoLData(lang);
+    if (type == 'MS')
+        getMSData(lang);
+    if (type == 'Chatting')
+        getChattingData(lang);
 
 };
