@@ -1,4 +1,4 @@
-###### tags: `bootstrap`, `JavaScript`, `JQuery`
+###### tags: `bootstrap`, `JavaScript`, `JQuery`,`axios`
 
 ---
 # TwitchAPI
