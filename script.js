@@ -114,7 +114,7 @@ function clearData() {
 }
 
 function changeLang(lang, type) {
-    $('.container h1').text(window.I18N[lang]['TITLE']);
+    $('.container h3').text(window.I18N[lang]['TITLE']);
     $('#LOL').text(window.I18N[lang]['LOLNAME']);
     $('#MS').text(window.I18N[lang]['MSNAME']);
     $('#Chat').text(window.I18N[lang]['ChattingNAME']);
