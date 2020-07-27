@@ -90,7 +90,7 @@ function getData(data, block) {
 };
 
 function getColumn(data) {
-    return `<div class="col-12 col-md-6 col-lg-4">
+    return `<div class="col-12 col-lg-6 col-xl-4">
             <a href="${data.channel.url}" target="_blank" class="twitch_block">
                     <div class="twitch_preview">
                         <img src="${data.preview.medium}"/>
